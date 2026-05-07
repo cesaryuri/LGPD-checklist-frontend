@@ -10,22 +10,21 @@ import { ChecklistDTO, ChecklistItemType } from '../dtos/checklistDTO'
 import { AppError } from '../utils/AppError'
 import { useToast } from './ToastContext'
 import { DeviceDTO } from '../dtos/deviceDTO'
-import { LawDTO } from '../dtos/lawDTO'
+import { PrincipleDTO } from '../dtos/principleDTO'
 import {
   listItemsService,
   listItemsServiceDefaultErrorMessage,
 } from '../services/item/listItems'
-import { SectionDTO } from '../dtos/sectionDTO'
 import { getItemValidationMessage } from '../libs/business'
 
 export interface ChecklistsContextType {
   devices: DeviceDTO[]
-  laws: LawDTO[]
+  principles: PrincipleDTO[]
   categoriesSelected: CategoriesType
   currChecklistId: number | undefined
   filteredChecklist: (
     isMandatory?: boolean,
-    sectionId?: number,
+    principleId?: number,
   ) => ChecklistItemType[]
   validateChecklist: (isMandatory: boolean) => string | null
   resetChecklist: () => void
@@ -35,14 +34,14 @@ export interface ChecklistsContextType {
   onCategoriesSelectedUpdate: (categoriesSelected: CategoriesType) => void
   loadChecklist: (id: number) => Promise<void>
   fetchItems: (
-    _laws: LawDTO[],
+    _principles: PrincipleDTO[],
     _devices: DeviceDTO[],
   ) => Promise<ChecklistItemType[] | null>
   setCurrChecklistId: React.Dispatch<React.SetStateAction<number | undefined>>
   onSetDevices: (devices: DeviceDTO[]) => void
-  onSetLaws: (laws: LawDTO[]) => void
+  onSetPrinciples: (principles: PrincipleDTO[]) => void
   removeDisabledItems: () => void
-  uniqueSections: (isMandatory?: boolean) => SectionDTO[]
+  uniquePrinciples: (isMandatory?: boolean) => PrincipleDTO[]
 }
 
 const ChecklistsContext = createContext({} as ChecklistsContextType)
@@ -66,7 +65,7 @@ export function ChecklistsContextProvider({
     'Não Preenchido': true,
   })
   const [devices, setDevices] = useState<DeviceDTO[]>([])
-  const [laws, setLaws] = useState<LawDTO[]>([])
+  const [principles, setPrinciples] = useState<PrincipleDTO[]>([])
   const [currChecklistId, setCurrChecklistId] = useState<number | undefined>()
 
   const findIndexByIsMandatoryAndCode = (
@@ -79,12 +78,12 @@ export function ChecklistsContextProvider({
     )
   }
 
-  const filteredChecklist = (isMandatory?: boolean, sectionId?: number) => {
+  const filteredChecklist = (isMandatory?: boolean, principleId?: number) => {
     const filtered = checklist.filter(
       (row) =>
         !row.disabled &&
         (isMandatory === undefined || row.item.isMandatory === isMandatory) &&
-        (sectionId === undefined || row.item.section?.id === sectionId) &&
+        (principleId === undefined || row.item.principle?.id === principleId) &&
         categoriesSelected[row.answer ? row.answer : 'Não Preenchido'],
     )
 
@@ -120,7 +119,7 @@ export function ChecklistsContextProvider({
       'Não se aplica': true,
       'Não Preenchido': true,
     })
-    setLaws([])
+    setPrinciples([])
     setDevices([])
     onUserUpdate({
       ...user,
@@ -140,14 +139,14 @@ export function ChecklistsContextProvider({
     setDevices(devices)
   }
 
-  const onSetLaws = (laws: LawDTO[]) => {
-    setLaws(laws)
+  const onSetPrinciples = (principles: PrincipleDTO[]) => {
+    setPrinciples(principles)
   }
 
   const setChecklistLoaded = (checklist: ChecklistDTO) => {
     setChecklist(checklist.checklistItems)
     setUserSystemId(checklist.systemId)
-    setLaws(checklist.laws ?? [])
+    setPrinciples(checklist.principles ?? [])
     setDevices(checklist.devices ?? [])
   }
 
@@ -156,12 +155,12 @@ export function ChecklistsContextProvider({
   }
 
   // Função para retornar seções únicas do checklist filtrado
-  const uniqueSections = (isMandatory?: boolean) => {
+  const uniquePrinciples = (isMandatory?: boolean) => {
     return Array.from(
       new Map(
         filteredChecklist(isMandatory).map((item) => [
-          item.item.section.id,
-          item.item.section,
+          item.item.principle.id,
+          item.item.principle,
         ]),
       ).values(),
     )
@@ -183,10 +182,10 @@ export function ChecklistsContextProvider({
     }
   }
 
-  const fetchItems = async (_laws = laws, _devices = devices) => {
+  const fetchItems = async (_principles = principles, _devices = devices) => {
     try {
       const data = await listItemsService(
-        _laws.map((l) => l.id),
+        _principles.map((p) => p.id),
         _devices.map((d) => d.id),
       )
 
@@ -231,7 +230,7 @@ export function ChecklistsContextProvider({
     <ChecklistsContext.Provider
       value={{
         devices,
-        laws,
+        principles,
         categoriesSelected,
         currChecklistId,
         filteredChecklist,
@@ -244,10 +243,10 @@ export function ChecklistsContextProvider({
         loadChecklist,
         fetchItems,
         setCurrChecklistId,
-        onSetLaws,
+        onSetPrinciples,
         onSetDevices,
         removeDisabledItems,
-        uniqueSections, // <-- adiciona ao contexto
+        uniquePrinciples, // <-- adiciona ao contexto
       }}
     >
       {children}

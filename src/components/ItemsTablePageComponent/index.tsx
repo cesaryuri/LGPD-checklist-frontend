@@ -8,7 +8,7 @@ import { ChartsContainer } from '../ChartsContainer'
 import { SectionTitleComponent } from '../SectionTitleComponent'
 import { SectionWithItemsTableComponent } from '../SectionWithItemsTableComponent'
 import { CheckboxesAnswerComponent } from '../CheckboxesAnswerComponent'
-import { SectionDTO } from '../../dtos/sectionDTO'
+import { PrincipleDTO } from '../../dtos/principleDTO'
 import { StepperSectionsComponent } from '../StepperSectionsComponent'
 import { useChecklists } from '../../contexts/ChecklistsContext'
 import { getItemValidationMessage } from '../../libs/business'
@@ -17,14 +17,14 @@ import { ButtonComponent } from '../ButtonComponent'
 interface ItemsTablePageComponentProps {
   text: string
   isMandatory: boolean
-  sections: SectionDTO[]
+  principles: PrincipleDTO[]
   action: () => void
 }
 
 export function ItemsTablePageComponent({
   text,
   isMandatory,
-  sections,
+  principles,
   action,
 }: ItemsTablePageComponentProps) {
   const navigate = useNavigate()
@@ -40,7 +40,7 @@ export function ItemsTablePageComponent({
   ]
 
   const handleNext = () => {
-    if (activeStep < sections.length - 1) setActiveStep((s) => s + 1)
+    if (activeStep < principles.length - 1) setActiveStep((s) => s + 1)
     else action()
   }
   const handleBack = () => {
@@ -48,8 +48,8 @@ export function ItemsTablePageComponent({
   }
 
   // Função para checar se todos os itens de uma seção estão preenchidos
-  function isSectionComplete(sectionId: number) {
-    const items = filteredChecklist(isMandatory, sectionId)
+  function isPrincipleComplete(principleId: number) {
+    const items = filteredChecklist(isMandatory, principleId)
     if (items.length === 0) return false
     return items.every((item) => {
       return item.answer && !getItemValidationMessage(item)
@@ -57,42 +57,42 @@ export function ItemsTablePageComponent({
   }
 
   // Array indicando se cada seção está completa
-  const completedSteps = sections.map((section) =>
-    isSectionComplete(section.id),
+  const completedSteps = principles.map((principle) =>
+    isPrincipleComplete(principle.id),
   )
 
-  const hasSections = sections && sections.length > 0
+  const hasPrinciples = principles && principles.length > 0
 
   return (
     <MainContainer hasTable>
       <CheckboxesAnswerComponent />
       <SectionContainer hasHeader>
         <SectionTitleComponent text={text} />
-        {hasSections && (
+        {hasPrinciples && (
           <ChartsContainer isMandatory={isMandatory} colors={colors} />
         )}
       </SectionContainer>
-      {hasSections && (
+      {hasPrinciples && (
         <strong>
           ATENÇÃO: Para todos os itens respondidos com &quot;Não&quot;, é
           obrigatório preencher o grau de severidade e o comentário do
           avaliador.
         </strong>
       )}
-      {hasSections ? (
+      {hasPrinciples ? (
         <>
           <StepperSectionsComponent
-            sections={sections}
+            principles={principles}
             activeStep={activeStep}
             onStepClick={setActiveStep}
             completedSteps={completedSteps}
             handleNext={handleNext}
             handleBack={handleBack}
           >
-            {sections[activeStep] && (
+            {principles[activeStep] && (
               <SectionWithItemsTableComponent
                 isMandatory={isMandatory}
-                sections={[sections[activeStep]]}
+                principles={[principles[activeStep]]}
               />
             )}
           </StepperSectionsComponent>

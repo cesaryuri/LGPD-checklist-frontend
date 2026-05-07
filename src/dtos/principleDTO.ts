@@ -1,4 +1,4 @@
-export type LawDTO = {
+export type PrincipleDTO = {
   id: number
   name: string
 }

@@ -1,7 +1,7 @@
 import { AnswerType, SeverityDegreeType } from '../@types'
 import { DeviceDTO } from './deviceDTO'
 import { ItemDTO } from './itemDTO'
-import { LawDTO } from './lawDTO'
+import { PrincipleDTO } from './principleDTO'
 
 export type ChecklistItemType = {
   item: ItemDTO
@@ -16,7 +16,7 @@ export type ChecklistDTO = {
   userId: number
   systemId: number
   checklistItems: ChecklistItemType[]
-  laws: LawDTO[]
+  principles: PrincipleDTO[]
   devices: DeviceDTO[]
   createdAt: Date
   updatedAt: Date

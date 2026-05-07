@@ -16,7 +16,7 @@ import {
 import { DeviceDTO } from '../../dtos/deviceDTO'
 
 export function ChecklistFamilies() {
-  const { laws, devices, onSetDevices, fetchItems } = useChecklists()
+  const { principles, devices, onSetDevices, fetchItems } = useChecklists()
   const { toastError, toastWarn } = useToast()
   const navigate = useNavigate()
   const { id } = useParams()
@@ -65,7 +65,7 @@ export function ChecklistFamilies() {
     const filteredDevices = allDevices.filter((device) =>
       selectedDeviceIds.includes(String(device.id)),
     )
-    const items = await fetchItems(laws, filteredDevices)
+    const items = await fetchItems(principles, filteredDevices)
 
     if (items && items.length === 0) {
       toastWarn(

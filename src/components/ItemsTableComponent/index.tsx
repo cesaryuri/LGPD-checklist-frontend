@@ -5,13 +5,13 @@ import { getItemValidationMessage } from '../../libs/business'
 
 interface ItemsTableComponentProps {
   isMandatory: boolean
-  sectionId: number
+  principleId: number
   isReport?: boolean
 }
 
 export function ItemsTableComponent({
   isMandatory,
-  sectionId,
+  principleId,
   isReport = false,
 }: ItemsTableComponentProps) {
   const {
@@ -31,12 +31,11 @@ export function ItemsTableComponent({
           <th>GRAU DE SEVERIDADE</th>
           <th>COMENTÁRIO DO AVALIADOR</th>
           <th>RECOMENDAÇÕES</th>
-          <th>LEIS</th>
           <th>DISPOSITIVOS</th>
         </tr>
       </thead>
       <tbody>
-        {filteredChecklist(isMandatory, sectionId).map((row, idx) => {
+        {filteredChecklist(isMandatory, principleId).map((row, idx) => {
           const isInvalid = getItemValidationMessage(row)
           const borderColor = theme.colors.red
           const cellStyle = isInvalid
@@ -48,7 +47,7 @@ export function ItemsTableComponent({
                 row.item.code +
                 idx +
                 row.item.isMandatory +
-                sectionId +
+                principleId +
                 row.severityDegree
               }
             >
@@ -137,9 +136,6 @@ export function ItemsTableComponent({
                 )}
               </td>
               <td style={cellStyle}>{row.item.recommendations}</td>
-              <td style={cellStyle}>
-                {row.item.laws?.map((law) => law.name).join(', ')}
-              </td>
               <td style={cellStyle}>
                 {row.item.devices?.map((device) => device.name).join(', ')}
               </td>

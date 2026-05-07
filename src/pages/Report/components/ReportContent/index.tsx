@@ -6,7 +6,7 @@ import { SectionWithItemsTableComponent } from '../../../../components/SectionWi
 import { useChecklists } from '../../../../contexts/ChecklistsContext'
 
 export function ReportContent() {
-  const { uniqueSections } = useChecklists()
+  const { uniquePrinciples } = useChecklists()
   const theme = useTheme()
 
   const colors = [
@@ -16,10 +16,10 @@ export function ReportContent() {
     theme.colors.contrast,
   ]
 
-  const mandatorySections = uniqueSections(true)
-  const nonMandatorySections = uniqueSections(false)
-  const hasMandatory = mandatorySections.length > 0
-  const hasNonMandatory = nonMandatorySections.length > 0
+  const mandatoryPrinciples = uniquePrinciples(true)
+  const nonMandatoryPrinciples = uniquePrinciples(false)
+  const hasMandatory = mandatoryPrinciples.length > 0
+  const hasNonMandatory = nonMandatoryPrinciples.length > 0
 
   return (
     <>
@@ -62,7 +62,7 @@ export function ReportContent() {
           />
         )}
         <SectionWithItemsTableComponent
-          sections={mandatorySections}
+          principles={mandatoryPrinciples}
           isMandatory
           isReport
         />
@@ -79,7 +79,7 @@ export function ReportContent() {
           />
         )}
         <SectionWithItemsTableComponent
-          sections={nonMandatorySections}
+          principles={nonMandatoryPrinciples}
           isMandatory={false}
           isReport
         />

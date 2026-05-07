@@ -13,7 +13,7 @@ export interface EditChecklistServiceRequest {
     severityDegree: SeverityDegreeType
     userComment?: string
   }[]
-  laws: number[]
+  principles: number[]
   devices: number[]
 }
 
@@ -23,7 +23,7 @@ async function editChecklistService(
   await api.put(`/checklists/${data.id}`, {
     systemId: data.systemId,
     items: data.items,
-    laws: data.laws,
+    principles: data.principles,
     devices: data.devices,
   })
 }

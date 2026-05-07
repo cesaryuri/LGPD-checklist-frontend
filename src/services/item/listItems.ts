@@ -9,12 +9,12 @@ interface listItemsServiceResponse {
 }
 
 export const listItemsService = async (
-  laws?: number[],
+  principles?: number[],
   devices?: number[],
 ): Promise<listItemsServiceResponse> => {
   const params: Record<string, string> = {}
-  if (laws && laws.length > 0) {
-    params.laws = laws.join(',')
+  if (principles && principles.length > 0) {
+    params.principles = principles.join(',')
   }
   if (devices && devices.length > 0) {
     params.devices = devices.join(',')

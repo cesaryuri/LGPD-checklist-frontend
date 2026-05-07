@@ -1,11 +1,11 @@
 import { Check } from 'phosphor-react'
-import { SectionDTO } from '../../dtos/sectionDTO'
+import { PrincipleDTO } from '../../dtos/principleDTO'
 import styled from 'styled-components'
 import { ReactNode } from 'react'
 import { ButtonComponent } from '../ButtonComponent'
 
 interface StepperSectionsComponentProps {
-  sections: SectionDTO[]
+  principles: PrincipleDTO[]
   activeStep: number
   onStepClick?: (idx: number) => void
   completedSteps?: boolean[]
@@ -15,7 +15,7 @@ interface StepperSectionsComponentProps {
 }
 
 export function StepperSectionsComponent({
-  sections,
+  principles,
   activeStep,
   onStepClick,
   completedSteps = [],
@@ -26,9 +26,9 @@ export function StepperSectionsComponent({
   return (
     <StepperContainer>
       <Stepper>
-        {sections.map((section, idx) => (
+        {principles.map((principle, idx) => (
           <Step
-            key={section.id}
+            key={principle.id}
             $active={idx === activeStep}
             $completed={completedSteps[idx]}
             onClick={onStepClick ? () => onStepClick(idx) : undefined}
@@ -36,11 +36,11 @@ export function StepperSectionsComponent({
           >
             {completedSteps[idx] ? (
               <StepContent>
-                <p style={{ margin: 0 }}>{section.name}</p>
+                <p style={{ margin: 0 }}>{principle.name}</p>
                 <Check size={24} alt="Seção totalmente preenchida" />
               </StepContent>
             ) : (
-              <p style={{ margin: 0 }}>{section.name}</p>
+              <p style={{ margin: 0 }}>{principle.name}</p>
             )}
           </Step>
         ))}
@@ -53,7 +53,7 @@ export function StepperSectionsComponent({
           disabled={activeStep === 0}
         />
         <ButtonComponent
-          text={activeStep === sections.length - 1 ? 'Finalizar' : 'Próximo'}
+          text={activeStep === principles.length - 1 ? 'Finalizar' : 'Próximo'}
           action={handleNext}
         />
       </StepButtons>

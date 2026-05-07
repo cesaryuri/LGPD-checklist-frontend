@@ -3,11 +3,11 @@ import { ItemsTableComponent } from '../ItemsTableComponent'
 import { SectionContainer } from '../../templates/SectionContainer'
 import { SectionTitleComponent } from '../SectionTitleComponent'
 import { useChecklists } from '../../contexts/ChecklistsContext'
-import { SectionDTO } from '../../dtos/sectionDTO'
+import { PrincipleDTO } from '../../dtos/principleDTO'
 
 interface SectionWithItemsTableComponentProps {
   isMandatory: boolean
-  sections: SectionDTO[]
+  principles: PrincipleDTO[]
   style?: CSSProperties
   title?: string
   isReport?: boolean
@@ -15,31 +15,31 @@ interface SectionWithItemsTableComponentProps {
 
 export function SectionWithItemsTableComponent({
   isMandatory,
-  sections,
+  principles,
   style,
   title,
   isReport = false,
 }: SectionWithItemsTableComponentProps) {
   const { filteredChecklist } = useChecklists()
 
-  const hasAnyItemInSection = (sectionId: number) => {
-    return filteredChecklist(isMandatory, sectionId).length > 0
+  const hasAnyItemInPrinciple = (principleId: number) => {
+    return filteredChecklist(isMandatory, principleId).length > 0
   }
 
   return (
     <SectionWithItemsTable $isReport={isReport}>
       {title && <SectionTitleComponent text={title} isSecondary />}
-      {sections.map((item, idx) => {
-        return hasAnyItemInSection(item.id) ? (
+      {principles.map((principle, idx) => {
+        return hasAnyItemInPrinciple(principle.id) ? (
           <SectionContainer
-            key={item.id + String(isMandatory) + idx}
+            key={principle.id + String(isMandatory) + idx}
             style={style}
           >
-            <SectionTitleComponent text={item.name} isSecondary />
+            <SectionTitleComponent text={principle.name} isSecondary />
             <ItemsContainer>
               <ItemsTableComponent
                 isMandatory={isMandatory}
-                sectionId={item.id}
+                principleId={principle.id}
                 isReport={isReport}
               />
             </ItemsContainer>

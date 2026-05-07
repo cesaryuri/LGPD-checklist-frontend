@@ -24,7 +24,7 @@ export function Report() {
   const { user: userLogged, isLogged } = useAuth()
   const { user } = useUsers()
   const { toastSuccess, toastError } = useToast()
-  const { filteredChecklist, removeDisabledItems, devices, laws } =
+  const { filteredChecklist, removeDisabledItems, devices, principles } =
     useChecklists()
   const { id } = useLoadChecklist()
   const navigate = useNavigate()
@@ -46,7 +46,7 @@ export function Report() {
             severityDegree: item.severityDegree || undefined,
             userComment: item.userComment || undefined,
           })),
-          laws: laws.map((law) => law.id),
+          principles: principles.map((principle) => principle.id),
           devices: devices.map((device) => device.id),
         })
 
@@ -79,7 +79,7 @@ export function Report() {
             severityDegree: item.severityDegree || undefined,
             userComment: item.userComment || undefined,
           })),
-          laws: laws.map((law) => law.id),
+          principles: principles.map((principle) => principle.id),
           devices: devices.map((device) => device.id),
         })
 

@@ -14,7 +14,7 @@ export interface CreateChecklistServiceRequest {
     severityDegree: SeverityDegreeType
     userComment?: string
   }[]
-  laws: number[]
+  principles: number[]
   devices: number[]
 }
 
@@ -29,7 +29,7 @@ async function createChecklistService(
     userId: data.userId,
     systemId: data.systemId,
     items: data.items,
-    laws: data.laws,
+    principles: data.principles,
     devices: data.devices,
   })
 
