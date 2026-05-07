@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ActionsFooterContainer } from '../../templates/ActionsFooterContainer'
 import { MainContainer } from '../../templates/MainContainer'
 import { SectionContainer } from '../../templates/SectionContainer'
 import { useTheme } from 'styled-components'
@@ -12,7 +10,6 @@ import { PrincipleDTO } from '../../dtos/principleDTO'
 import { StepperSectionsComponent } from '../StepperSectionsComponent'
 import { useChecklists } from '../../contexts/ChecklistsContext'
 import { getItemValidationMessage } from '../../libs/business'
-import { ButtonComponent } from '../ButtonComponent'
 
 interface ItemsTablePageComponentProps {
   text: string
@@ -27,7 +24,6 @@ export function ItemsTablePageComponent({
   principles,
   action,
 }: ItemsTablePageComponentProps) {
-  const navigate = useNavigate()
   const theme = useTheme()
   const [activeStep, setActiveStep] = useState(0)
   const { filteredChecklist } = useChecklists()
@@ -108,10 +104,6 @@ export function ItemsTablePageComponent({
           </p>
         </SectionContainer>
       )}
-      <ActionsFooterContainer hasMessage>
-        <ButtonComponent text="Voltar" action={() => navigate(-1)} />
-        <ButtonComponent text="Continuar" action={action} />
-      </ActionsFooterContainer>
     </MainContainer>
   )
 }
