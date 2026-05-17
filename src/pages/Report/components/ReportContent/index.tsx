@@ -16,34 +16,20 @@ export function ReportContent() {
     theme.colors.contrast,
   ]
 
-  const mandatoryPrinciples = uniquePrinciples(true)
-  const nonMandatoryPrinciples = uniquePrinciples(false)
-  const hasMandatory = mandatoryPrinciples.length > 0
-  const hasNonMandatory = nonMandatoryPrinciples.length > 0
+  const principles = uniquePrinciples()
+  const hasPrinciples = principles.length > 0
 
   return (
     <>
       <SectionContainer>
         <SectionTitleComponent text="Gráficos" isSecondary />
-        {hasMandatory && (
+        {hasPrinciples && (
           <SectionContainer style={{ marginBottom: 20 }}>
-            <SectionTitleComponent
-              text="Gráficos Itens Obrigatórios"
-              isSecondary
-            />
-            <ChartsContainer isMandatory={true} colors={colors} />
+            <SectionTitleComponent text="Gráficos Itens" isSecondary />
+            <ChartsContainer colors={colors} />
           </SectionContainer>
         )}
-        {hasNonMandatory && (
-          <SectionContainer>
-            <SectionTitleComponent
-              text="Gráficos Itens Não Obrigatórios"
-              isSecondary
-            />
-            <ChartsContainer isMandatory={false} colors={colors} />
-          </SectionContainer>
-        )}
-        {!hasMandatory && !hasNonMandatory && (
+        {!hasPrinciples && (
           <SectionTitleComponent
             text="Nenhum item disponível para exibir gráficos."
             isSecondary
@@ -51,38 +37,11 @@ export function ReportContent() {
         )}
       </SectionContainer>
       <SectionContainer>
-        <SectionTitleComponent
-          text="Tabelas de Itens Obrigatórios"
-          isSecondary
-        />
-        {!hasMandatory && (
-          <SectionTitleComponent
-            text="Nenhum item obrigatório disponível."
-            isSecondary
-          />
+        <SectionTitleComponent text="Tabelas de Itens" isSecondary />
+        {!hasPrinciples && (
+          <SectionTitleComponent text="Nenhum item disponível." isSecondary />
         )}
-        <SectionWithItemsTableComponent
-          principles={mandatoryPrinciples}
-          isMandatory
-          isReport
-        />
-      </SectionContainer>
-      <SectionContainer>
-        <SectionTitleComponent
-          text="Tabelas de Itens Não Obrigatórios"
-          isSecondary
-        />
-        {!hasNonMandatory && (
-          <SectionTitleComponent
-            text="Nenhum item não obrigatório disponível."
-            isSecondary
-          />
-        )}
-        <SectionWithItemsTableComponent
-          principles={nonMandatoryPrinciples}
-          isMandatory={false}
-          isReport
-        />
+        <SectionWithItemsTableComponent principles={principles} isReport />
       </SectionContainer>
     </>
   )

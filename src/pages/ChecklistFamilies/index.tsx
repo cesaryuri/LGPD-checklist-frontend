@@ -23,11 +23,11 @@ export function ChecklistFamilies() {
   const [allDevices, setAllDevices] = useState<DeviceDTO[]>([])
   const [selectedDeviceIds, setSelectedDeviceIds] = useState<string[]>([])
 
-  const goToMandatoryItems = () => {
+  const goToChecklistItems = () => {
     if (id) {
-      navigate(`/mandatory-items/${id}`)
+      navigate(`/checklist-items/${id}`)
     } else {
-      navigate('/mandatory-items')
+      navigate('/checklist-items')
     }
   }
 
@@ -72,7 +72,7 @@ export function ChecklistFamilies() {
         'Nenhum item de checklist encontrado para os filtros escolhidos.',
       )
     } else if (items) {
-      goToMandatoryItems()
+      goToChecklistItems()
     }
     onSetDevices(filteredDevices)
   }

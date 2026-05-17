@@ -22,13 +22,10 @@ export interface ChecklistsContextType {
   principles: PrincipleDTO[]
   categoriesSelected: CategoriesType
   currChecklistId: number | undefined
-  filteredChecklist: (
-    isMandatory?: boolean,
-    principleId?: number,
-  ) => ChecklistItemType[]
-  validateChecklist: (isMandatory: boolean) => string | null
+  filteredChecklist: (principleId?: number) => ChecklistItemType[]
+  validateChecklist: () => string | null
   resetChecklist: () => void
-  findIndexByIsMandatoryAndCode: (isMandatory: boolean, code: string) => number
+  findIndexByCode: (code: string) => number
   onChecklistUpdate: (checklist: ChecklistItemType[]) => void
   updateChecklistRow: (checklist: ChecklistItemType, index: number) => void
   onCategoriesSelectedUpdate: (categoriesSelected: CategoriesType) => void
@@ -41,7 +38,7 @@ export interface ChecklistsContextType {
   onSetDevices: (devices: DeviceDTO[]) => void
   onSetPrinciples: (principles: PrincipleDTO[]) => void
   removeDisabledItems: () => void
-  uniquePrinciples: (isMandatory?: boolean) => PrincipleDTO[]
+  uniquePrinciples: () => PrincipleDTO[]
 }
 
 const ChecklistsContext = createContext({} as ChecklistsContextType)
@@ -68,21 +65,14 @@ export function ChecklistsContextProvider({
   const [principles, setPrinciples] = useState<PrincipleDTO[]>([])
   const [currChecklistId, setCurrChecklistId] = useState<number | undefined>()
 
-  const findIndexByIsMandatoryAndCode = (
-    isMandatory: boolean,
-    code: string,
-  ) => {
-    return checklist.findIndex(
-      (item) =>
-        item.item.isMandatory === isMandatory && item.item.code === code,
-    )
+  const findIndexByCode = (code: string) => {
+    return checklist.findIndex((item) => item.item.code === code)
   }
 
-  const filteredChecklist = (isMandatory?: boolean, principleId?: number) => {
+  const filteredChecklist = (principleId?: number) => {
     const filtered = checklist.filter(
       (row) =>
         !row.disabled &&
-        (isMandatory === undefined || row.item.isMandatory === isMandatory) &&
         (principleId === undefined || row.item.principle?.id === principleId) &&
         categoriesSelected[row.answer ? row.answer : 'Não Preenchido'],
     )
@@ -103,8 +93,8 @@ export function ChecklistsContextProvider({
     setChecklist(checklistCopy)
   }
 
-  const validateChecklist = (isMandatory: boolean): string | null => {
-    for (const item of filteredChecklist(isMandatory)) {
+  const validateChecklist = (): string | null => {
+    for (const item of filteredChecklist()) {
       const msg = getItemValidationMessage(item)
       if (msg) return msg
     }
@@ -155,10 +145,10 @@ export function ChecklistsContextProvider({
   }
 
   // Função para retornar seções únicas do checklist filtrado
-  const uniquePrinciples = (isMandatory?: boolean) => {
+  const uniquePrinciples = () => {
     return Array.from(
       new Map(
-        filteredChecklist(isMandatory).map((item) => [
+        filteredChecklist().map((item) => [
           item.item.principle.id,
           item.item.principle,
         ]),
@@ -239,7 +229,7 @@ export function ChecklistsContextProvider({
         onChecklistUpdate,
         updateChecklistRow,
         onCategoriesSelectedUpdate,
-        findIndexByIsMandatoryAndCode,
+        findIndexByCode,
         loadChecklist,
         fetchItems,
         setCurrChecklistId,

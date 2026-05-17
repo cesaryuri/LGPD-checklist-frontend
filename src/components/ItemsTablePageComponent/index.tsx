@@ -10,20 +10,22 @@ import { PrincipleDTO } from '../../dtos/principleDTO'
 import { StepperSectionsComponent } from '../StepperSectionsComponent'
 import { useChecklists } from '../../contexts/ChecklistsContext'
 import { getItemValidationMessage } from '../../libs/business'
+import { useNavigate } from 'react-router-dom'
+import { ActionsFooterContainer } from '../../templates/ActionsFooterContainer'
+import { ButtonComponent } from '../ButtonComponent'
 
 interface ItemsTablePageComponentProps {
   text: string
-  isMandatory: boolean
   principles: PrincipleDTO[]
   action: () => void
 }
 
 export function ItemsTablePageComponent({
   text,
-  isMandatory,
   principles,
   action,
 }: ItemsTablePageComponentProps) {
+  const navigate = useNavigate()
   const theme = useTheme()
   const [activeStep, setActiveStep] = useState(0)
   const { filteredChecklist } = useChecklists()
@@ -45,7 +47,7 @@ export function ItemsTablePageComponent({
 
   // Função para checar se todos os itens de uma seção estão preenchidos
   function isPrincipleComplete(principleId: number) {
-    const items = filteredChecklist(isMandatory, principleId)
+    const items = filteredChecklist(principleId)
     if (items.length === 0) return false
     return items.every((item) => {
       return item.answer && !getItemValidationMessage(item)
@@ -64,9 +66,7 @@ export function ItemsTablePageComponent({
       <CheckboxesAnswerComponent />
       <SectionContainer hasHeader>
         <SectionTitleComponent text={text} />
-        {hasPrinciples && (
-          <ChartsContainer isMandatory={isMandatory} colors={colors} />
-        )}
+        {hasPrinciples && <ChartsContainer colors={colors} />}
       </SectionContainer>
       {hasPrinciples && (
         <strong>
@@ -87,7 +87,6 @@ export function ItemsTablePageComponent({
           >
             {principles[activeStep] && (
               <SectionWithItemsTableComponent
-                isMandatory={isMandatory}
                 principles={[principles[activeStep]]}
               />
             )}
@@ -104,6 +103,10 @@ export function ItemsTablePageComponent({
           </p>
         </SectionContainer>
       )}
+      <ActionsFooterContainer hasMessage>
+        <ButtonComponent text="Voltar" action={() => navigate(-1)} />
+        <ButtonComponent text="Continuar" action={action} />
+      </ActionsFooterContainer>
     </MainContainer>
   )
 }

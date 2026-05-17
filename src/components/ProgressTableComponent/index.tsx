@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 interface ProgressTableProps {
-  isMandatory?: boolean
   data: { name: string; value: number }[]
 }
 

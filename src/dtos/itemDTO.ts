@@ -6,7 +6,6 @@ export type ItemDTO = {
   code: string
   itemDesc: string
   recommendations: string
-  isMandatory: boolean
   principle: PrincipleDTO
   devices?: DeviceDTO[]
 }

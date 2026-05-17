@@ -6,7 +6,6 @@ import { useChecklists } from '../../contexts/ChecklistsContext'
 import { PrincipleDTO } from '../../dtos/principleDTO'
 
 interface SectionWithItemsTableComponentProps {
-  isMandatory: boolean
   principles: PrincipleDTO[]
   style?: CSSProperties
   title?: string
@@ -14,7 +13,6 @@ interface SectionWithItemsTableComponentProps {
 }
 
 export function SectionWithItemsTableComponent({
-  isMandatory,
   principles,
   style,
   title,
@@ -23,7 +21,7 @@ export function SectionWithItemsTableComponent({
   const { filteredChecklist } = useChecklists()
 
   const hasAnyItemInPrinciple = (principleId: number) => {
-    return filteredChecklist(isMandatory, principleId).length > 0
+    return filteredChecklist(principleId).length > 0
   }
 
   return (
@@ -31,14 +29,10 @@ export function SectionWithItemsTableComponent({
       {title && <SectionTitleComponent text={title} isSecondary />}
       {principles.map((principle, idx) => {
         return hasAnyItemInPrinciple(principle.id) ? (
-          <SectionContainer
-            key={principle.id + String(isMandatory) + idx}
-            style={style}
-          >
+          <SectionContainer key={principle.id + idx} style={style}>
             <SectionTitleComponent text={principle.name} isSecondary />
             <ItemsContainer>
               <ItemsTableComponent
-                isMandatory={isMandatory}
                 principleId={principle.id}
                 isReport={isReport}
               />

@@ -3,8 +3,7 @@ import { Home } from './pages/Home'
 import { Report } from './pages/Report'
 import { DefaultLayout } from './layouts/DefaultLayout'
 import { ChecklistFamilies } from './pages/ChecklistFamilies'
-import { MandatoryItems } from './pages/MandatoryItems'
-import { NonMandatoryItems } from './pages/NonMandatoryItems'
+import { ChecklistItems } from './pages/ChecklistItems'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { NotFound } from './pages/NotFound'
@@ -37,11 +36,8 @@ export function Router() {
         <Route path="/checklist-families" element={<ChecklistFamilies />}>
           <Route path=":id" element={<ChecklistFamilies />} />
         </Route>
-        <Route path="/mandatory-items" element={<MandatoryItems />}>
-          <Route path=":id" element={<MandatoryItems />} />
-        </Route>
-        <Route path="/non-mandatory-items" element={<NonMandatoryItems />}>
-          <Route path=":id" element={<NonMandatoryItems />} />
+        <Route path="/checklist-items" element={<ChecklistItems />}>
+          <Route path=":id" element={<ChecklistItems />} />
         </Route>
         <Route path="/report" element={<Report />}>
           <Route path=":id" element={<Report />} />
