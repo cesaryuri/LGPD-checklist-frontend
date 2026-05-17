@@ -30,7 +30,7 @@ export function Report() {
   const navigate = useNavigate()
 
   const { toPDF, targetRef } = usePDF({
-    filename: 'RelatorioLGPD.pdf',
+    filename: 'RelatorioConformidade.pdf',
     page: { margin: Margin.MEDIUM },
   })
 

@@ -27,7 +27,9 @@ export function Header() {
 
   return (
     <HeaderContainer>
-      <h2 onClick={() => navigateToHome()}>Checklist LGPD</h2>
+      <h2 onClick={() => navigateToHome()}>
+        Checklist de Conformidade para IoT em Saúde
+      </h2>
       <div>
         <ButtonComponent
           icon={

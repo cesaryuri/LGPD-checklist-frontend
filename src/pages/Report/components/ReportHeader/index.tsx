@@ -44,7 +44,7 @@ export function ReportHeader() {
   return (
     <>
       <SectionContainer hasHeader>
-        <SectionTitleComponent text="Relatório LGPD" />
+        <SectionTitleComponent text="Relatório de Conformidade" />
         <LineComponent />
         <UserInfoContainer>
           <div>
