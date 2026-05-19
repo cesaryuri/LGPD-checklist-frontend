@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Home } from './pages/Home'
 import { Report } from './pages/Report'
 import { DefaultLayout } from './layouts/DefaultLayout'
-import { ChecklistFamilies } from './pages/ChecklistFamilies'
+import { DevicesFamilies } from './pages/DevicesFamilies'
 import { ChecklistItems } from './pages/ChecklistItems'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
@@ -11,7 +11,6 @@ import { Profile } from './pages/Profile'
 import { Systems } from './pages/Systems'
 import { Checklists } from './pages/Checklists'
 import { useAuth } from './contexts/AuthContext'
-import { PrincipleFamilies } from './pages/PrincipleFamilies'
 
 export function Router() {
   const { isLogged } = useAuth()
@@ -30,11 +29,8 @@ export function Router() {
           path="/register"
           element={!isLogged ? <Register /> : <Navigate replace to="/" />}
         />
-        <Route path="/principles" element={<PrincipleFamilies />}>
-          <Route path=":id" element={<PrincipleFamilies />} />
-        </Route>
-        <Route path="/checklist-families" element={<ChecklistFamilies />}>
-          <Route path=":id" element={<ChecklistFamilies />} />
+        <Route path="/devices-families" element={<DevicesFamilies />}>
+          <Route path=":id" element={<DevicesFamilies />} />
         </Route>
         <Route path="/checklist-items" element={<ChecklistItems />}>
           <Route path=":id" element={<ChecklistItems />} />

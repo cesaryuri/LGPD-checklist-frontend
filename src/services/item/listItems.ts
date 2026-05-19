@@ -9,16 +9,10 @@ interface listItemsServiceResponse {
 }
 
 export const listItemsService = async (
-  principles?: number[],
-  devices?: number[],
+  deviceType: string,
 ): Promise<listItemsServiceResponse> => {
   const params: Record<string, string> = {}
-  if (principles && principles.length > 0) {
-    params.principles = principles.join(',')
-  }
-  if (devices && devices.length > 0) {
-    params.devices = devices.join(',')
-  }
+  params.deviceType = deviceType
   const { data } = await api.get(`/items`, { params })
 
   return data

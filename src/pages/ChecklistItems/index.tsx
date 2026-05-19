@@ -5,7 +5,7 @@ import { useToast } from '../../contexts/ToastContext'
 import { useLoadChecklist } from '../../hooks/loadChecklist'
 
 export function ChecklistItems() {
-  const { validateChecklist, uniquePrinciples } = useChecklists()
+  const { validateChecklist, deviceType } = useChecklists()
   const { toastError } = useToast()
   const navigate = useNavigate()
   const { id } = useLoadChecklist()
@@ -26,8 +26,7 @@ export function ChecklistItems() {
 
   return (
     <ItemsTablePageComponent
-      text="Itens"
-      principles={uniquePrinciples()}
+      text={`Dispositivo ${deviceType}`}
       action={validateChecklistItems}
     />
   )

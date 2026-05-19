@@ -8,14 +8,13 @@ const createChecklistServiceDefaultErrorMessage =
 export interface CreateChecklistServiceRequest {
   userId: number
   systemId: number
+  deviceType: string
   items: {
     id: number
     answer: AnswerType
     severityDegree: SeverityDegreeType
     userComment?: string
   }[]
-  principles: number[]
-  devices: number[]
 }
 
 export interface CreateChecklistServiceResponse {
@@ -28,9 +27,8 @@ async function createChecklistService(
   const { data: responseData } = await api.post('/checklists', {
     userId: data.userId,
     systemId: data.systemId,
+    deviceType: data.deviceType,
     items: data.items,
-    principles: data.principles,
-    devices: data.devices,
   })
 
   return responseData

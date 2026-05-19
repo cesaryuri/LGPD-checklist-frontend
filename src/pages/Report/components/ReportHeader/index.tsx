@@ -11,10 +11,12 @@ import {
 } from '../../../../services/system/getSystemService'
 import { AppError } from '../../../../utils/AppError'
 import { useToast } from '../../../../contexts/ToastContext'
+import { useChecklists } from '../../../../contexts/ChecklistsContext'
 
 export function ReportHeader() {
   const { user } = useUsers()
   const { toastError } = useToast()
+  const { deviceType } = useChecklists()
   const [system, setSystem] = useState<SystemDTO>()
 
   const getSystem = async (id: number) => {
@@ -44,7 +46,9 @@ export function ReportHeader() {
   return (
     <>
       <SectionContainer hasHeader>
-        <SectionTitleComponent text="Relatório de Conformidade" />
+        <SectionTitleComponent
+          text={'Dispositivo ' + deviceType + ' - Relatório de Conformidade'}
+        />
         <LineComponent />
         <UserInfoContainer>
           <div>

@@ -46,9 +46,9 @@ export function UserForm({ submitted }: UserFormProps) {
       onUserUpdate(data)
 
       if (id) {
-        navigate(`/principles/${id}`)
+        navigate(`/devices-families/${id}`)
       } else {
-        navigate('/principles')
+        navigate('/devices-families')
       }
     }
   }

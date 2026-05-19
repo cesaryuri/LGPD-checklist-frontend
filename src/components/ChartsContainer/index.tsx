@@ -135,7 +135,7 @@ export function ChartsContainer({ colors }: ChartsContainerProps) {
     <ChartsWrapper>
       <ProgressBarChartComponent title="Progresso" data={progressData()} />
       <PieChartComponent
-        title={'Itens'}
+        title={`Distribuição de respostas`}
         data={distributionData()}
         colors={colors}
       />

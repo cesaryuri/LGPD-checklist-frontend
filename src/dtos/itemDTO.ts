@@ -6,6 +6,6 @@ export type ItemDTO = {
   code: string
   itemDesc: string
   recommendations: string
-  principle: PrincipleDTO
-  devices?: DeviceDTO[]
+  deviceType: DeviceDTO['name']
+  principles: PrincipleDTO[]
 }
