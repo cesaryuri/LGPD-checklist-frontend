@@ -8,42 +8,71 @@ export function Instructions() {
       <InstructionsTitle>Instruções Gerais</InstructionsTitle>
       <LineComponent />
       <InstructionsParagraph>
-        Este Checklist tem o objetivo de avaliar a adequação dos sistemas à Lei
-        Geral de Proteção de Dados LGPD, e possui alguns itens adicionais
-        específicos para IoT. O checklist está dividido em 2 partes:{' '}
-        <strong>47 Itens Obrigatórios</strong> (exigidos pela Lei LGPD) e{' '}
-        <strong>36 Itens Não Obrigatórios</strong> (itens recomendáveis,
-        oportunidades de melhorias, opcionais). Os 47 itens obrigatórios estão
-        classificados em 5 categorias: Transparência de Dados (T), Consentimento
-        do Titular (C), Direito do Titular (D), Segurança de Dados (S) e
-        Responsabilidade do Controlador (R). Dos 36 itens não obrigatórios, 27
-        são itens específicos de IoT e 9 itens gerais, na qual estão
-        classificados em 4 categorias: Segurança de dados (S), Responsabilidade
-        do Controlador (R), Acesso ao Dispositivo (A) e Segurança Física (SF).{' '}
-        <br /> <br />
-        Para preencher o Checklist Empresa, o avaliador, após a leitura de cada
-        item, deve indicar na coluna <strong>Resposta</strong> se o item está
-        1-Sim ( item adequado, em conformidade), 2-Não (item com defeito, não
-        adequado), 3- Não se aplica( item que não corresponde ao tipo de
-        tratamento de dados que a empresa realiza). Em seguida, para os itens
-        não adequados ou com defeitos, o avaliador deve preencher na coluna{' '}
-        <strong>Grau de Severidade</strong>, se o defeito é 1-Leve, 2-Grave,
-        3-Catastrófico. Por fim, na coluna opcional{' '}
-        <strong>Comentário do Avaliador</strong>,o avaliador poderá descrever
-        qualquer informação sobre o item relacionado, sugestões, dúvidas,
-        problemas encontrados, localização do defeito, explicação sobre a
-        avaliação, entre outros. A última coluna de{' '}
-        <strong>Recomendações</strong>, são comentários e sugestões opcionais
-        para uma solução ou melhor adequação do item à LGPD. O checklist possui
-        2 gráficos para acompanhamento dos itens obrigatórios e 2 gráficos para
-        o acompanhamento dos itens não obrigatórios, são eles: 1-{' '}
-        <strong>Gráfico de Progresso </strong>
-        (mostra a porcentagem do preenchimento total da tabela) e 2-{' '}
-        <strong>Gráfico do Indice de Adequação</strong> ( taxa de adequação ou
-        aderência dos itens, taxa de defeito/problemas encontrados, taxa de
-        itens não aplicados, e taxa de itens não preenchidos). No final, o{' '}
-        <strong>Relatório</strong> apresenta os dados totais do checklist de
-        inspeção.
+        Este checklist tem como objetivo avaliar a adequação de dispositivos IoT
+        da área da saúde com restrições de processamento, memória e energia.
+        <br />
+        <br />
+        Para fins de avaliação, os dispositivos foram organizados nas seguintes
+        categorias:
+        <br />
+        <br />
+        <strong>Sensores</strong>: dispositivos responsáveis pela coleta e
+        transmissão de sinais biomédicos e fisiológicos, como sensores ECG,
+        sensores WBAN e sensores de sinais vitais.
+        <br />
+        <br />
+        <strong>Wearables</strong>: dispositivos vestíveis utilizados para
+        monitoramento contínuo e acompanhamento da saúde do usuário.
+        <br />
+        <br />
+        <strong>Dispositivos Implantáveis (IMD)</strong>: dispositivos médicos
+        implantados no corpo humano, utilizados para monitoramento ou suporte
+        terapêutico com comunicação sem fio.
+        <br />
+        <br />
+        Para preencher o checklist, o avaliador deverá ler cada item e indicar,
+        na coluna “Resposta”, uma das seguintes opções:
+        <br />
+        <br />
+        <ul style={{ paddingLeft: '20px' }}>
+          <li>
+            <strong>1 – Sim</strong>: item adequado, em conformidade;{' '}
+          </li>
+          <li>
+            <strong>2 – Não</strong>: item inadequado ou com defeito;{' '}
+          </li>
+          <li>
+            <strong>3 – Não se aplica</strong>: item que não corresponde ao tipo
+            de dispositivo avaliado ou ao tratamento de dados realizado.
+          </li>
+        </ul>{' '}
+        <br />
+        <br />
+        Para os itens classificados como “Não”, o avaliador deverá preencher a
+        coluna “Grau de Severidade”, indicando o impacto do problema
+        identificado:
+        <br />
+        <br />
+        <ul style={{ paddingLeft: '20px' }}>
+          <li>
+            <strong>1 – Leve</strong>
+          </li>
+          <li>
+            <strong>2 – Grave</strong>
+          </li>
+          <li>
+            <strong>3 – Catastrófico</strong>
+          </li>
+        </ul>{' '}
+        <br />
+        <br />
+        Na coluna “Comentário do Avaliador”, poderão ser registradas observações
+        adicionais, como dúvidas, justificativas, problemas encontrados ou
+        detalhes sobre a avaliação realizada.
+        <br />
+        <br />
+        Por fim, a coluna “Recomendações” poderá ser utilizada para registrar
+        sugestões de correção, melhoria ou adequação do item avaliado.
       </InstructionsParagraph>
       <LineComponent />
     </SectionContainer>
