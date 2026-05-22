@@ -5,22 +5,16 @@ import { ProgressBarChartComponent } from '../ProgressBarChartComponent'
 import { ProgressTableComponent } from '../ProgressTableComponent'
 
 interface ChartsContainerProps {
-  isMandatory?: boolean
   colors: string[]
 }
 
-export function ChartsContainer({
-  isMandatory = false,
-  colors,
-}: ChartsContainerProps) {
+export function ChartsContainer({ colors }: ChartsContainerProps) {
   const { filteredChecklist } = useChecklists()
 
-  const progressData = (isMandatory: boolean) => {
+  const progressData = () => {
     const progress = filteredChecklist().reduce((acc, curr) => {
-      if (curr.item.isMandatory === isMandatory) {
-        if (curr.answer) {
-          return acc + 1
-        }
+      if (curr.answer) {
+        return acc + 1
       }
       return acc
     }, 0)
@@ -28,40 +22,26 @@ export function ChartsContainer({
     return [
       {
         name: '',
-        value:
-          (progress /
-            filteredChecklist().reduce((acc, curr) => {
-              if (curr.item.isMandatory === isMandatory) {
-                return acc + 1
-              }
-              return acc
-            }, 0)) *
-          100,
+        value: (progress / filteredChecklist().length) * 100,
       },
     ]
   }
 
-  const distributionData = (isMandatory: boolean) => {
+  const distributionData = () => {
     const distribution = filteredChecklist().reduce(
       (acc, curr) => {
-        if (curr.item.isMandatory === isMandatory) {
-          if (curr.answer === 'Sim') {
-            const index = acc.findIndex(
-              (obj) => obj.name === 'Taxa de Adequação',
-            )
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          } else if (curr.answer === 'Não') {
-            const index = acc.findIndex(
-              (obj) => obj.name === 'Defeito/Problema',
-            )
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          } else if (curr.answer === 'Não se aplica') {
-            const index = acc.findIndex((obj) => obj.name === 'Não se aplica')
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          } else {
-            const index = acc.findIndex((obj) => obj.name === 'Não preenchido')
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          }
+        if (curr.answer === 'Sim') {
+          const index = acc.findIndex((obj) => obj.name === 'Taxa de Adequação')
+          acc[index] = { ...acc[index], value: acc[index].value + 1 }
+        } else if (curr.answer === 'Não') {
+          const index = acc.findIndex((obj) => obj.name === 'Defeito/Problema')
+          acc[index] = { ...acc[index], value: acc[index].value + 1 }
+        } else if (curr.answer === 'Não se aplica') {
+          const index = acc.findIndex((obj) => obj.name === 'Não se aplica')
+          acc[index] = { ...acc[index], value: acc[index].value + 1 }
+        } else {
+          const index = acc.findIndex((obj) => obj.name === 'Não preenchido')
+          acc[index] = { ...acc[index], value: acc[index].value + 1 }
         }
         return acc
       },
@@ -113,38 +93,32 @@ export function ChartsContainer({
     ]
   }
 
-  const progressTableData = (isMandatory: boolean) => {
-    const columnText = isMandatory
-      ? 'Itens Obrigatórios'
-      : 'Itens Não Obrigatórios'
-
+  const progressTableData = () => {
     const rowsNames = [
-      `${columnText} Adequados:`,
-      `${columnText} Não Adequados:`,
-      `${columnText} Não Aplicado:`,
-      `${columnText} Não Preenchidos:`,
+      `Itens Adequados:`,
+      `Itens Não Adequados:`,
+      `Itens Não Aplicado:`,
+      `Itens Não Preenchidos:`,
       'Total:',
     ]
 
     return filteredChecklist().reduce(
       (acc, curr) => {
-        if (curr.item.isMandatory === isMandatory) {
-          if (curr.answer === 'Sim') {
-            const index = acc.findIndex((obj) => obj.name === rowsNames[0])
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          } else if (curr.answer === 'Não') {
-            const index = acc.findIndex((obj) => obj.name === rowsNames[1])
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          } else if (curr.answer === 'Não se aplica') {
-            const index = acc.findIndex((obj) => obj.name === rowsNames[2])
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          } else {
-            const index = acc.findIndex((obj) => obj.name === rowsNames[3])
-            acc[index] = { ...acc[index], value: acc[index].value + 1 }
-          }
-          const index = acc.findIndex((obj) => obj.name === rowsNames[4])
+        if (curr.answer === 'Sim') {
+          const index = acc.findIndex((obj) => obj.name === rowsNames[0])
+          acc[index] = { ...acc[index], value: acc[index].value + 1 }
+        } else if (curr.answer === 'Não') {
+          const index = acc.findIndex((obj) => obj.name === rowsNames[1])
+          acc[index] = { ...acc[index], value: acc[index].value + 1 }
+        } else if (curr.answer === 'Não se aplica') {
+          const index = acc.findIndex((obj) => obj.name === rowsNames[2])
+          acc[index] = { ...acc[index], value: acc[index].value + 1 }
+        } else {
+          const index = acc.findIndex((obj) => obj.name === rowsNames[3])
           acc[index] = { ...acc[index], value: acc[index].value + 1 }
         }
+        const index = acc.findIndex((obj) => obj.name === rowsNames[4])
+        acc[index] = { ...acc[index], value: acc[index].value + 1 }
         return acc
       },
       [
@@ -159,19 +133,13 @@ export function ChartsContainer({
 
   return (
     <ChartsWrapper>
-      <ProgressBarChartComponent
-        title="Progresso"
-        data={progressData(isMandatory)}
-      />
+      <ProgressBarChartComponent title="Progresso" data={progressData()} />
       <PieChartComponent
-        title={isMandatory ? 'Itens Obrigatórios' : 'Itens não obrigatórios'}
-        data={distributionData(isMandatory)}
+        title={`Distribuição de respostas`}
+        data={distributionData()}
         colors={colors}
       />
-      <ProgressTableComponent
-        isMandatory={isMandatory}
-        data={progressTableData(isMandatory)}
-      />
+      <ProgressTableComponent data={progressTableData()} />
     </ChartsWrapper>
   )
 }

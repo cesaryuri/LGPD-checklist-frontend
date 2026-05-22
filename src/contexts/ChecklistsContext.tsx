@@ -10,39 +10,28 @@ import { ChecklistDTO, ChecklistItemType } from '../dtos/checklistDTO'
 import { AppError } from '../utils/AppError'
 import { useToast } from './ToastContext'
 import { DeviceDTO } from '../dtos/deviceDTO'
-import { LawDTO } from '../dtos/lawDTO'
 import {
   listItemsService,
   listItemsServiceDefaultErrorMessage,
 } from '../services/item/listItems'
-import { SectionDTO } from '../dtos/sectionDTO'
 import { getItemValidationMessage } from '../libs/business'
 
 export interface ChecklistsContextType {
-  devices: DeviceDTO[]
-  laws: LawDTO[]
+  deviceType: DeviceDTO['name'] | undefined
   categoriesSelected: CategoriesType
   currChecklistId: number | undefined
-  filteredChecklist: (
-    isMandatory?: boolean,
-    sectionId?: number,
-  ) => ChecklistItemType[]
-  validateChecklist: (isMandatory: boolean) => string | null
+  filteredChecklist: () => ChecklistItemType[]
+  validateChecklist: () => string | null
   resetChecklist: () => void
-  findIndexByIsMandatoryAndCode: (isMandatory: boolean, code: string) => number
+  findIndexByCode: (code: string) => number
   onChecklistUpdate: (checklist: ChecklistItemType[]) => void
   updateChecklistRow: (checklist: ChecklistItemType, index: number) => void
   onCategoriesSelectedUpdate: (categoriesSelected: CategoriesType) => void
   loadChecklist: (id: number) => Promise<void>
-  fetchItems: (
-    _laws: LawDTO[],
-    _devices: DeviceDTO[],
-  ) => Promise<ChecklistItemType[] | null>
+  fetchItems: (device: DeviceDTO) => Promise<ChecklistItemType[] | null>
   setCurrChecklistId: React.Dispatch<React.SetStateAction<number | undefined>>
-  onSetDevices: (devices: DeviceDTO[]) => void
-  onSetLaws: (laws: LawDTO[]) => void
+  onSetDeviceType: (device: DeviceDTO['name']) => void
   removeDisabledItems: () => void
-  uniqueSections: (isMandatory?: boolean) => SectionDTO[]
 }
 
 const ChecklistsContext = createContext({} as ChecklistsContextType)
@@ -65,26 +54,17 @@ export function ChecklistsContextProvider({
     'Não se aplica': true,
     'Não Preenchido': true,
   })
-  const [devices, setDevices] = useState<DeviceDTO[]>([])
-  const [laws, setLaws] = useState<LawDTO[]>([])
+  const [deviceType, setDeviceType] = useState<DeviceDTO['name'] | undefined>()
   const [currChecklistId, setCurrChecklistId] = useState<number | undefined>()
 
-  const findIndexByIsMandatoryAndCode = (
-    isMandatory: boolean,
-    code: string,
-  ) => {
-    return checklist.findIndex(
-      (item) =>
-        item.item.isMandatory === isMandatory && item.item.code === code,
-    )
+  const findIndexByCode = (code: string) => {
+    return checklist.findIndex((item) => item.item.code === code)
   }
 
-  const filteredChecklist = (isMandatory?: boolean, sectionId?: number) => {
+  const filteredChecklist = () => {
     const filtered = checklist.filter(
       (row) =>
         !row.disabled &&
-        (isMandatory === undefined || row.item.isMandatory === isMandatory) &&
-        (sectionId === undefined || row.item.section?.id === sectionId) &&
         categoriesSelected[row.answer ? row.answer : 'Não Preenchido'],
     )
 
@@ -104,8 +84,8 @@ export function ChecklistsContextProvider({
     setChecklist(checklistCopy)
   }
 
-  const validateChecklist = (isMandatory: boolean): string | null => {
-    for (const item of filteredChecklist(isMandatory)) {
+  const validateChecklist = (): string | null => {
+    for (const item of filteredChecklist()) {
       const msg = getItemValidationMessage(item)
       if (msg) return msg
     }
@@ -120,8 +100,7 @@ export function ChecklistsContextProvider({
       'Não se aplica': true,
       'Não Preenchido': true,
     })
-    setLaws([])
-    setDevices([])
+    setDeviceType(undefined)
     onUserUpdate({
       ...user,
       name: isLogged ? user.name : '',
@@ -136,35 +115,18 @@ export function ChecklistsContextProvider({
     setCategoriesSelected(categoriesSelected)
   }
 
-  const onSetDevices = (devices: DeviceDTO[]) => {
-    setDevices(devices)
-  }
-
-  const onSetLaws = (laws: LawDTO[]) => {
-    setLaws(laws)
+  const onSetDeviceType = (device: DeviceDTO['name']) => {
+    setDeviceType(device)
   }
 
   const setChecklistLoaded = (checklist: ChecklistDTO) => {
     setChecklist(checklist.checklistItems)
     setUserSystemId(checklist.systemId)
-    setLaws(checklist.laws ?? [])
-    setDevices(checklist.devices ?? [])
+    setDeviceType(checklist.deviceType)
   }
 
   const removeDisabledItems = () => {
     setChecklist((prev) => prev.filter((item) => !item.disabled))
-  }
-
-  // Função para retornar seções únicas do checklist filtrado
-  const uniqueSections = (isMandatory?: boolean) => {
-    return Array.from(
-      new Map(
-        filteredChecklist(isMandatory).map((item) => [
-          item.item.section.id,
-          item.item.section,
-        ]),
-      ).values(),
-    )
   }
 
   const loadChecklist = async (id: number) => {
@@ -183,12 +145,9 @@ export function ChecklistsContextProvider({
     }
   }
 
-  const fetchItems = async (_laws = laws, _devices = devices) => {
+  const fetchItems = async (device: DeviceDTO) => {
     try {
-      const data = await listItemsService(
-        _laws.map((l) => l.id),
-        _devices.map((d) => d.id),
-      )
+      const data = await listItemsService(device.name)
 
       // IDs of items that should be enabled (from API)
       const enabledIds = data.items.map((item) => item.id)
@@ -230,8 +189,7 @@ export function ChecklistsContextProvider({
   return (
     <ChecklistsContext.Provider
       value={{
-        devices,
-        laws,
+        deviceType,
         categoriesSelected,
         currChecklistId,
         filteredChecklist,
@@ -240,14 +198,12 @@ export function ChecklistsContextProvider({
         onChecklistUpdate,
         updateChecklistRow,
         onCategoriesSelectedUpdate,
-        findIndexByIsMandatoryAndCode,
+        findIndexByCode,
         loadChecklist,
         fetchItems,
         setCurrChecklistId,
-        onSetLaws,
-        onSetDevices,
+        onSetDeviceType,
         removeDisabledItems,
-        uniqueSections, // <-- adiciona ao contexto
       }}
     >
       {children}

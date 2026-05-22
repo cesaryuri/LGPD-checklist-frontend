@@ -4,21 +4,14 @@ import styled, { useTheme } from 'styled-components'
 import { getItemValidationMessage } from '../../libs/business'
 
 interface ItemsTableComponentProps {
-  isMandatory: boolean
-  sectionId: number
   isReport?: boolean
 }
 
 export function ItemsTableComponent({
-  isMandatory,
-  sectionId,
   isReport = false,
 }: ItemsTableComponentProps) {
-  const {
-    updateChecklistRow,
-    filteredChecklist,
-    findIndexByIsMandatoryAndCode,
-  } = useChecklists()
+  const { deviceType, updateChecklistRow, filteredChecklist, findIndexByCode } =
+    useChecklists()
   const theme = useTheme()
 
   return (
@@ -30,28 +23,19 @@ export function ItemsTableComponent({
           <th>RESPOSTA</th>
           <th>GRAU DE SEVERIDADE</th>
           <th>COMENTÁRIO DO AVALIADOR</th>
-          <th>RECOMENDAÇÕES</th>
-          <th>LEIS</th>
-          <th>DISPOSITIVOS</th>
+          <th>PRINCÍPIOS</th>
+          <th>RECOMENDAÇÃO</th>
         </tr>
       </thead>
       <tbody>
-        {filteredChecklist(isMandatory, sectionId).map((row, idx) => {
+        {filteredChecklist().map((row, idx) => {
           const isInvalid = getItemValidationMessage(row)
           const borderColor = theme.colors.red
           const cellStyle = isInvalid
             ? { border: `2px solid ${borderColor}` }
             : {}
           return (
-            <tr
-              key={
-                row.item.code +
-                idx +
-                row.item.isMandatory +
-                sectionId +
-                row.severityDegree
-              }
-            >
+            <tr key={row.item.code + idx + deviceType + row.severityDegree}>
               <td style={cellStyle}>{row.item.code}</td>
               <td style={cellStyle}>{row.item.itemDesc}</td>
               <td style={cellStyle}>
@@ -70,10 +54,7 @@ export function ItemsTableComponent({
                       }
                       updateChecklistRow(
                         { ...row, answer: selectedValue as AnswerType },
-                        findIndexByIsMandatoryAndCode(
-                          row.item.isMandatory,
-                          row.item.code,
-                        ),
+                        findIndexByCode(row.item.code),
                       )
                     }}
                   >
@@ -103,10 +84,7 @@ export function ItemsTableComponent({
                           ...row,
                           severityDegree: selectedValue as SeverityDegreeType,
                         },
-                        findIndexByIsMandatoryAndCode(
-                          row.item.isMandatory,
-                          row.item.code,
-                        ),
+                        findIndexByCode(row.item.code),
                       )
                     }}
                     disabled={row.answer !== 'Não'}
@@ -127,22 +105,18 @@ export function ItemsTableComponent({
                     onChange={(e) =>
                       updateChecklistRow(
                         { ...row, userComment: e.target.value },
-                        findIndexByIsMandatoryAndCode(
-                          row.item.isMandatory,
-                          row.item.code,
-                        ),
+                        findIndexByCode(row.item.code),
                       )
                     }
                   />
                 )}
               </td>
+              <td style={cellStyle}>
+                {row.item.principles
+                  ?.map((principle) => principle.name)
+                  .join(', ')}
+              </td>
               <td style={cellStyle}>{row.item.recommendations}</td>
-              <td style={cellStyle}>
-                {row.item.laws?.map((law) => law.name).join(', ')}
-              </td>
-              <td style={cellStyle}>
-                {row.item.devices?.map((device) => device.name).join(', ')}
-              </td>
             </tr>
           )
         })}

@@ -15,19 +15,19 @@ import {
 } from '../../services/device/listDevices'
 import { DeviceDTO } from '../../dtos/deviceDTO'
 
-export function ChecklistFamilies() {
-  const { laws, devices, onSetDevices, fetchItems } = useChecklists()
+export function DevicesFamilies() {
+  const { deviceType, onSetDeviceType, fetchItems } = useChecklists()
   const { toastError, toastWarn } = useToast()
   const navigate = useNavigate()
   const { id } = useParams()
   const [allDevices, setAllDevices] = useState<DeviceDTO[]>([])
-  const [selectedDeviceIds, setSelectedDeviceIds] = useState<string[]>([])
+  const [selectedDeviceType, setSelectedDeviceType] = useState<string>('')
 
-  const goToMandatoryItems = () => {
+  const goToChecklistItems = () => {
     if (id) {
-      navigate(`/mandatory-items/${id}`)
+      navigate(`/checklist-items/${id}`)
     } else {
-      navigate('/mandatory-items')
+      navigate('/checklist-items')
     }
   }
 
@@ -36,9 +36,9 @@ export function ChecklistFamilies() {
       try {
         const data = await listDevicesService()
         setAllDevices(data.devices)
-        // If context has devices, set selected IDs
-        if (devices && devices.length > 0) {
-          setSelectedDeviceIds(devices.map((d) => String(d.id)))
+        // If context has devices, set selected device to the first one
+        if (deviceType) {
+          setSelectedDeviceType(String(deviceType))
         }
       } catch (error) {
         const isAppError = error instanceof AppError
@@ -52,29 +52,29 @@ export function ChecklistFamilies() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleDeviceCheckboxChange = (deviceId: number) => {
-    const idStr = String(deviceId)
-    setSelectedDeviceIds((prev) =>
-      prev.includes(idStr)
-        ? prev.filter((id) => id !== idStr)
-        : [...prev, idStr],
-    )
+  const handleDeviceRadioChange = (deviceType: string) => {
+    setSelectedDeviceType(String(deviceType))
   }
 
   const handleContinue = async () => {
-    const filteredDevices = allDevices.filter((device) =>
-      selectedDeviceIds.includes(String(device.id)),
+    if (!selectedDeviceType) {
+      toastWarn('Selecione uma família de dispositivos antes de continuar.')
+      return
+    }
+
+    const filteredDevice = allDevices.find(
+      (device) => String(device.name) === selectedDeviceType,
     )
-    const items = await fetchItems(laws, filteredDevices)
+    const items = await fetchItems(filteredDevice!)
 
     if (items && items.length === 0) {
       toastWarn(
         'Nenhum item de checklist encontrado para os filtros escolhidos.',
       )
     } else if (items) {
-      goToMandatoryItems()
+      goToChecklistItems()
     }
-    onSetDevices(filteredDevices)
+    onSetDeviceType(filteredDevice!.name)
   }
 
   return (
@@ -82,7 +82,7 @@ export function ChecklistFamilies() {
       <SectionContainer hasHeader>
         <ChecklistFamiliesContainer>
           <p>
-            Selecione abaixo quais famílias de checklists você quer incluir
+            Selecione abaixo qual família de dispositivos você quer incluir
             nessa avaliação:
           </p>
           <form>
@@ -90,11 +90,13 @@ export function ChecklistFamilies() {
               allDevices.length > 0 &&
               allDevices.map((device) => (
                 <CheckboxComponent
-                  key={device.id}
-                  value={String(device.id)}
-                  checked={selectedDeviceIds.includes(String(device.id))}
+                  key={device.name}
+                  type="radio"
+                  name="device"
+                  value={String(device.name)}
+                  checked={selectedDeviceType === String(device.name)}
                   labelText={device.name}
-                  onChange={() => handleDeviceCheckboxChange(device.id)}
+                  onChange={() => handleDeviceRadioChange(device.name)}
                 />
               ))}
           </form>
@@ -119,7 +121,8 @@ const ChecklistFamiliesContainer = styled.div`
     flex-direction: column;
     gap: 1rem;
 
-    input[type='checkbox'] {
+    input[type='checkbox'],
+    input[type='radio'] {
       width: 1.25rem;
       height: 1.25rem;
       accent-color: ${({ theme }) => theme.colors.contrast};

@@ -1,14 +1,11 @@
 import { DeviceDTO } from './deviceDTO'
-import { LawDTO } from './lawDTO'
-import { SectionDTO } from './sectionDTO'
+import { PrincipleDTO } from './principleDTO'
 
 export type ItemDTO = {
   id: number
   code: string
   itemDesc: string
   recommendations: string
-  isMandatory: boolean
-  section: SectionDTO
-  laws?: LawDTO[]
-  devices?: DeviceDTO[]
+  deviceType: DeviceDTO['name']
+  principles: PrincipleDTO[]
 }

@@ -24,13 +24,12 @@ export function Report() {
   const { user: userLogged, isLogged } = useAuth()
   const { user } = useUsers()
   const { toastSuccess, toastError } = useToast()
-  const { filteredChecklist, removeDisabledItems, devices, laws } =
-    useChecklists()
+  const { filteredChecklist, removeDisabledItems, deviceType } = useChecklists()
   const { id } = useLoadChecklist()
   const navigate = useNavigate()
 
   const { toPDF, targetRef } = usePDF({
-    filename: 'RelatorioLGPD.pdf',
+    filename: 'RelatorioConformidade.pdf',
     page: { margin: Margin.MEDIUM },
   })
 
@@ -46,8 +45,7 @@ export function Report() {
             severityDegree: item.severityDegree || undefined,
             userComment: item.userComment || undefined,
           })),
-          laws: laws.map((law) => law.id),
-          devices: devices.map((device) => device.id),
+          deviceType: deviceType!,
         })
 
         removeDisabledItems()
@@ -79,8 +77,7 @@ export function Report() {
             severityDegree: item.severityDegree || undefined,
             userComment: item.userComment || undefined,
           })),
-          laws: laws.map((law) => law.id),
-          devices: devices.map((device) => device.id),
+          deviceType: deviceType!,
         })
 
         removeDisabledItems()

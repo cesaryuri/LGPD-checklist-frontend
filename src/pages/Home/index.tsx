@@ -2,7 +2,6 @@ import { ButtonComponent } from '../../components/ButtonComponent'
 import { MainContainer } from '../../templates/MainContainer'
 import { Instructions } from './components/Instructions'
 import { UserForm } from './components/UserForm'
-import { VocabularyTable } from './components/VocabularyTable'
 import { ActionsFooterContainer } from '../../templates/ActionsFooterContainer'
 import { useState } from 'react'
 import { useLoadChecklist } from '../../hooks/loadChecklist'
@@ -15,7 +14,6 @@ export function Home() {
     <MainContainer>
       <Instructions />
       <UserForm submitted={pressed} />
-      <VocabularyTable />
       <ActionsFooterContainer>
         <div />
         <ButtonComponent

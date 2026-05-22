@@ -4,16 +4,14 @@ import { useChecklists } from '../../contexts/ChecklistsContext'
 import { useToast } from '../../contexts/ToastContext'
 import { useLoadChecklist } from '../../hooks/loadChecklist'
 
-export function NonMandatoryItems() {
-  const { validateChecklist, uniqueSections } = useChecklists()
+export function ChecklistItems() {
+  const { validateChecklist, deviceType } = useChecklists()
   const { toastError } = useToast()
   const navigate = useNavigate()
   const { id } = useLoadChecklist()
 
-  const isMandatory = false
-
-  const validateNonMandatoryItems = () => {
-    const messageError = validateChecklist(isMandatory)
+  const validateChecklistItems = () => {
+    const messageError = validateChecklist()
 
     if (!messageError) {
       if (id) {
@@ -28,10 +26,8 @@ export function NonMandatoryItems() {
 
   return (
     <ItemsTablePageComponent
-      isMandatory={false}
-      text="Itens Não Obrigatórios"
-      sections={uniqueSections(isMandatory)}
-      action={validateNonMandatoryItems}
+      text={`Dispositivo ${deviceType}`}
+      action={validateChecklistItems}
     />
   )
 }

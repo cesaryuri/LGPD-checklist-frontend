@@ -7,14 +7,13 @@ const editChecklistServiceDefaultErrorMessage =
 export interface EditChecklistServiceRequest {
   id: number
   systemId: number
+  deviceType: string
   items: {
     id: number
     answer: AnswerType
     severityDegree: SeverityDegreeType
     userComment?: string
   }[]
-  laws: number[]
-  devices: number[]
 }
 
 async function editChecklistService(
@@ -22,9 +21,8 @@ async function editChecklistService(
 ): Promise<void> {
   await api.put(`/checklists/${data.id}`, {
     systemId: data.systemId,
+    deviceType: data.deviceType,
     items: data.items,
-    laws: data.laws,
-    devices: data.devices,
   })
 }
 

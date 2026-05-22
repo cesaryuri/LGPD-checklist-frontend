@@ -2,9 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Home } from './pages/Home'
 import { Report } from './pages/Report'
 import { DefaultLayout } from './layouts/DefaultLayout'
-import { ChecklistFamilies } from './pages/ChecklistFamilies'
-import { MandatoryItems } from './pages/MandatoryItems'
-import { NonMandatoryItems } from './pages/NonMandatoryItems'
+import { DevicesFamilies } from './pages/DevicesFamilies'
+import { ChecklistItems } from './pages/ChecklistItems'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { NotFound } from './pages/NotFound'
@@ -12,7 +11,6 @@ import { Profile } from './pages/Profile'
 import { Systems } from './pages/Systems'
 import { Checklists } from './pages/Checklists'
 import { useAuth } from './contexts/AuthContext'
-import { LawFamilies } from './pages/LawFamilies'
 
 export function Router() {
   const { isLogged } = useAuth()
@@ -31,17 +29,11 @@ export function Router() {
           path="/register"
           element={!isLogged ? <Register /> : <Navigate replace to="/" />}
         />
-        <Route path="/laws" element={<LawFamilies />}>
-          <Route path=":id" element={<LawFamilies />} />
+        <Route path="/devices-families" element={<DevicesFamilies />}>
+          <Route path=":id" element={<DevicesFamilies />} />
         </Route>
-        <Route path="/checklist-families" element={<ChecklistFamilies />}>
-          <Route path=":id" element={<ChecklistFamilies />} />
-        </Route>
-        <Route path="/mandatory-items" element={<MandatoryItems />}>
-          <Route path=":id" element={<MandatoryItems />} />
-        </Route>
-        <Route path="/non-mandatory-items" element={<NonMandatoryItems />}>
-          <Route path=":id" element={<NonMandatoryItems />} />
+        <Route path="/checklist-items" element={<ChecklistItems />}>
+          <Route path=":id" element={<ChecklistItems />} />
         </Route>
         <Route path="/report" element={<Report />}>
           <Route path=":id" element={<Report />} />
